@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈测试〉
  *
  * @author cj
@@ -24,13 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @since 1.0.0
  */
 @Controller
-public class HelloController {
+public class IndexController {
 
-    @GetMapping("/hello")
-    public  String hello(@RequestParam(name = "name")String name, Model model){
-
-           model.addAttribute("name",name);
-        return  "hello";
-
+    @GetMapping("/")
+    public String index() {
+        return "index";
     }
 }
