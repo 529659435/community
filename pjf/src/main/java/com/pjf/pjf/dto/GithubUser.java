@@ -23,7 +23,7 @@ import java.util.Objects;
 public class GithubUser {
     private String name;
     private Long id;
-    private  String bio;
+    private String bio;
 
     @Override
     public String toString() {
