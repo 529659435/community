@@ -10,14 +10,18 @@
  */
 package com.pjf.pjf.controller;
 
+import com.pjf.pjf.dto.QuestionDTO;
 import com.pjf.pjf.mapper.UserMapper;
 import com.pjf.pjf.model.User;
+import com.pjf.pjf.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -31,10 +35,15 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
+
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request) {
+    public String index(HttpServletRequest request,
+                        Model model
+    ) {
 
         //方法：让用户持久在线
         Cookie[] cookies = request.getCookies();
@@ -52,6 +61,8 @@ public class IndexController {
         }
 
 
+        List<QuestionDTO> questionList = questionService.list();
+        model.addAttribute("questions", questionList);
         return "index";
     }
 }

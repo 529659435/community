@@ -30,7 +30,7 @@ public class AccessTokenDTO {
     private String code;
     private String redirect_uri;
     private String state;
-    private String avatar_url;
+    private String avatarUrl;
 
 }
 

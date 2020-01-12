@@ -13,7 +13,10 @@ package com.pjf.pjf.mapper;
 import com.pjf.pjf.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -29,4 +32,7 @@ public interface QuestionMapper {
 
     @Insert("INSERT INTO QUESTION(TITLE,DESCRIPTION,GMT_CREATE,GMT_MODIFIED,CREATOR,TAG)VALUES(#{title},#{description},#{gmt_Create},#{gmt_Modified},#{creator},#{tag})")
      void createQuestion(Question question);
+
+    @Select("SELECT * FROM QUESTION")
+    List<Question> list();
 }

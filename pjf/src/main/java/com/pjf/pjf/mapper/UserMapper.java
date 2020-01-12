@@ -33,11 +33,14 @@ public interface UserMapper {
      *
      * @param user
      */
-    @Insert("INSERT INTO USER(name,account_id,token,gmt_create,gmt_modified,avatar_url)values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified}," +
-            "#{avatar_url})")
+    @Insert("INSERT INTO USER(name,account_id,token,gmt_create,gmt_modified,avatar_Url)values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified}," +
+            "#{avatarUrl})")
     void  insert(User user);
 
 
     @Select("SELECT * FROM USER WHERE TOKEN=#{token}")
     User findByToken(@Param("token") String token);
+
+    @Select("SELECT * FROM USER WHERE id=#{creator}")
+    User findById(@Param("creator") Integer creator);
 }
