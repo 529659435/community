@@ -63,15 +63,15 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubuser = githubProvider.getUser(accessToken);
+        GithubUser githubUser = githubProvider.getUser(accessToken);
         //System.out.println(user);
         //判断：是否登入
-        if (githubuser != null) {
+        if (githubUser != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setName(githubuser.getName());
-            user.setAccountId(String.valueOf(githubuser.getId()));
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);

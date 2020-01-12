@@ -10,8 +10,6 @@
  */
 package com.pjf.pjf.model;
 
-import com.pjf.pjf.mapper.UserMapper;
-
 import java.util.Objects;
 
 /**
