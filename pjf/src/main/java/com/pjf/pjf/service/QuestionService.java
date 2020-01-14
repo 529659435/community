@@ -10,6 +10,7 @@
  */
 package com.pjf.pjf.service;
 
+import com.pjf.pjf.dto.PaginationDTO;
 import com.pjf.pjf.dto.QuestionDTO;
 import com.pjf.pjf.mapper.QuestionMapper;
 import com.pjf.pjf.mapper.UserMapper;
@@ -40,9 +41,25 @@ public class QuestionService {
     private UserMapper userMapper;
 
 
-    public List<QuestionDTO> list() {
-        List<Question> questions = questionMapper.list();
+    public PaginationDTO list(Integer page, Integer size) {
+        Integer totalCount = questionMapper.count();
+        PaginationDTO pagintionDTO = new PaginationDTO();
+        pagintionDTO.setPagination(totalCount, page, size);
+
+        //防止小于分页情况
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > pagintionDTO.getTotalPage()) {
+            page = pagintionDTO.getTotalPage();
+        }
+
+        //size*(page-1)
+        Integer offset = size * (page - 1);
+        List<Question> questions = questionMapper.list(offset, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
+
+
         for (Question question : questions) {
             User user = userMapper.findById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -51,6 +68,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        return questionDTOList;
+        pagintionDTO.setQuestions(questionDTOList);
+        return pagintionDTO;
     }
 }

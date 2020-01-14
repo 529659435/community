@@ -77,7 +77,7 @@ public class AuthorizeController {
             user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
             //校验：检查浏览器Cookie是否存入cookie
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("token", token));
             return "redirect:/";
 
         } else {
