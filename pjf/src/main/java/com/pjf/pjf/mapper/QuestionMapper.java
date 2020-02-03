@@ -11,10 +11,7 @@
 package com.pjf.pjf.mapper;
 
 import com.pjf.pjf.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,15 +31,22 @@ public interface QuestionMapper {
     @Insert("INSERT INTO QUESTION(TITLE,DESCRIPTION,GMT_CREATE,GMT_MODIFIED,CREATOR,TAG)VALUES(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
     void createQuestion(Question question);
 
-    @Select("SELECT * FROM QUESTION limit #{offset},#{size}")
+    @Select("SELECT * FROM QUESTION where status = '0'  ORDER BY GMT_CREATE DESC limit #{offset},#{size}")
     List<Question> list(@Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
-    @Select("select count(1) from question")
+    @Select("select count(1) from question where status = '0'")
     Integer count();
 
-    @Select("SELECT * FROM QUESTION where creator =#{userId} ORDER BY GMT_CREATE DESC limit #{offset},#{size} ")
+    @Select("SELECT * FROM QUESTION where status = '0' and creator =#{userId} ORDER BY GMT_CREATE DESC limit #{offset},#{size} ")
     List<Question> listByUserId(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
-    @Select("select count(1) from question where creator=#{userId}")
+    @Select("select count(1) from question where status = '0' and creator=#{userId}")
     Integer countByUserId(@Param(value = "userId") Integer userId);
+
+
+    @Select("select * from question  where status = '0' and id = #{id}")
+    Question getById(@Param(value = "id") Integer id);
+
+    @Update("Update question  set status = '1' where id = #{id}")
+    void getDelById(@Param(value = "id") Integer id);
 }
