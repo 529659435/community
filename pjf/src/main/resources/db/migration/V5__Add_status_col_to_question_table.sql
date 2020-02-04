@@ -1,3 +1,3 @@
 alter table QUESTION
- add STATUS varchar(10);
+ add STATUS varchar(10) default 0;
 

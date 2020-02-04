@@ -11,14 +11,11 @@
 package com.pjf.pjf.mapper;
 
 import com.pjf.pjf.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈用户sql〉
  *
  * @author cj
@@ -30,17 +27,22 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
 
     /**
-     *
      * @param user
      */
     @Insert("INSERT INTO USER(name,account_id,token,gmt_create,gmt_modified,avatar_Url)values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified}," +
             "#{avatarUrl})")
-    void  insert(User user);
-
+    void insert(User user);
 
     @Select("SELECT * FROM USER WHERE TOKEN=#{token}")
     User findByToken(@Param("token") String token);
 
     @Select("SELECT * FROM USER WHERE id=#{creator}")
     User findById(@Param("creator") Integer creator);
+
+    @Select("SELECT * FROM USER WHERE account_id=#{accountId}")
+    User findByAccountId(@Param("accountId") String accountId);
+
+    @Update("UPDATE USER SET name = #{name},token =#{token},avatar_Url = #{avatarUrl}, gmt_modified = #{gmtModified} WHERE id=#{id}")
+    void Update(User dbUser);
+
 }
