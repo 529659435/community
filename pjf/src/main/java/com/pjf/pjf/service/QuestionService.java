@@ -118,4 +118,18 @@ public class QuestionService {
     public void getDelById(Integer id) {
         questionMapper.getDelById(id);
     }
+
+    public void createOrUpdate(Question question) {
+
+        if(question.getId() == null){
+            //创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.createQuestion(question);
+        }else {
+            //更新
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.update(question);
+        }
+    }
 }

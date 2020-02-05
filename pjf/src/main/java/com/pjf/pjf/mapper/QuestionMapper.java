@@ -49,4 +49,8 @@ public interface QuestionMapper {
 
     @Update("Update question  set status = '1' where id = #{id}")
     void getDelById(@Param(value = "id") Integer id);
+
+    @Update("Update question  set TITLE = #{title},DESCRIPTION=#{description}, TAG=#{tag},GMT_MODIFIED=#{gmtModified} where id = #{id}")
+    void update(Question question);
+
 }
