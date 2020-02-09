@@ -15,7 +15,9 @@ import com.pjf.pjf.dto.QuestionDTO;
 import com.pjf.pjf.mapper.QuestionMapper;
 import com.pjf.pjf.mapper.UserMapper;
 import com.pjf.pjf.model.Question;
+import com.pjf.pjf.model.QuestionExample;
 import com.pjf.pjf.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,9 @@ public class QuestionService {
 
 
     public PaginationDTO list(Integer page, Integer size) {
-        Integer totalCount = questionMapper.count();
+        QuestionExample example = new QuestionExample();
+        example.createCriteria().andStatusEqualTo("0");
+        Integer totalCount = Math.toIntExact(questionMapper.countByExample(example));
         PaginationDTO pagintionDTO = new PaginationDTO();
         pagintionDTO.setPagination(totalCount, page, size);
 
@@ -56,12 +60,13 @@ public class QuestionService {
 
         //size*(page-1)
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.list(offset, size);
+        example.createCriteria().andStatusEqualTo("0");
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(example, new RowBounds(offset, size));
+
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-
         for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             //question类拷贝到questionDTO
             BeanUtils.copyProperties(question, questionDTO);
@@ -73,7 +78,10 @@ public class QuestionService {
     }
 
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
-        Integer totalCount = questionMapper.countByUserId(userId);
+
+        QuestionExample example = new QuestionExample();
+        example.createCriteria().andIdEqualTo(userId);
+        Integer totalCount = Math.toIntExact(questionMapper.countByExample(example));
         PaginationDTO pagintionDTO = new PaginationDTO();
         pagintionDTO.setPagination(totalCount, page, size);
 
@@ -87,12 +95,17 @@ public class QuestionService {
 
         //size*(page-1)
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.listByUserId(userId,offset,size);
+        QuestionExample example1 = new QuestionExample();
+        example.createCriteria().andIdEqualTo(userId);
+        example.createCriteria().andStatusEqualTo("0");
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(example1, new RowBounds(offset, size));
+
+
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
 
         for (Question question : questions) {
-            User user = userMapper.findById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             //question类拷贝到questionDTO
             BeanUtils.copyProperties(question, questionDTO);
@@ -107,29 +120,35 @@ public class QuestionService {
 
 
     public QuestionDTO getById(Integer id) {
-        Question question =  questionMapper.getById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.findById(question.getCreator());
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
 
     public void getDelById(Integer id) {
-        questionMapper.getDelById(id);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdEqualTo(id);
+        Question dbquestion = new Question();
+        dbquestion.setStatus("1");
+        questionMapper.updateByExampleSelective(dbquestion,questionExample );
     }
 
     public void createOrUpdate(Question question) {
 
-        if(question.getId() == null){
+        if (question.getId() == null) {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.createQuestion(question);
-        }else {
+            questionMapper.insertSelective(question);
+        } else {
             //更新
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+            questionMapper.updateByExampleSelective(question, questionExample);
         }
     }
 }
