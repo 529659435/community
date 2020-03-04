@@ -14,6 +14,7 @@ import com.pjf.pjf.dto.PaginationDTO;
 import com.pjf.pjf.dto.QuestionDTO;
 import com.pjf.pjf.exception.CustomizeErrrorCode;
 import com.pjf.pjf.exception.CustomizeException;
+import com.pjf.pjf.mapper.QuestionExtMapper;
 import com.pjf.pjf.mapper.QuestionMapper;
 import com.pjf.pjf.mapper.UserMapper;
 import com.pjf.pjf.model.Question;
@@ -44,6 +45,8 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         QuestionExample example = new QuestionExample();
@@ -158,5 +161,12 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setViewCount(1);
+        question.setId(id);
+        questionExtMapper.incView(question);
     }
 }
