@@ -12,6 +12,8 @@ package com.pjf.pjf.service;
 
 import com.pjf.pjf.dto.PaginationDTO;
 import com.pjf.pjf.dto.QuestionDTO;
+import com.pjf.pjf.exception.CustomizeErrrorCode;
+import com.pjf.pjf.exception.CustomizeException;
 import com.pjf.pjf.mapper.QuestionMapper;
 import com.pjf.pjf.mapper.UserMapper;
 import com.pjf.pjf.model.Question;
@@ -60,7 +62,6 @@ public class QuestionService {
 
         //size*(page-1)
         Integer offset = size * (page - 1);
-        example.createCriteria().andStatusEqualTo("0");
         List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(example, new RowBounds(offset, size));
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
@@ -72,6 +73,11 @@ public class QuestionService {
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
+            //判断对象为空
+         /*   if (!StringUtils.isEmpty(user)){
+
+            }*/
+
         }
         pagintionDTO.setQuestions(questionDTOList);
         return pagintionDTO;
@@ -80,7 +86,7 @@ public class QuestionService {
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
 
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andIdEqualTo(userId);
+        example.createCriteria().andCreatorEqualTo(userId).andStatusEqualTo("0");
         Integer totalCount = Math.toIntExact(questionMapper.countByExample(example));
         PaginationDTO pagintionDTO = new PaginationDTO();
         pagintionDTO.setPagination(totalCount, page, size);
@@ -95,10 +101,7 @@ public class QuestionService {
 
         //size*(page-1)
         Integer offset = size * (page - 1);
-        QuestionExample example1 = new QuestionExample();
-        example.createCriteria().andIdEqualTo(userId);
-        example.createCriteria().andStatusEqualTo("0");
-        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(example1, new RowBounds(offset, size));
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(example, new RowBounds(offset, size));
 
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
@@ -121,6 +124,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -133,11 +139,10 @@ public class QuestionService {
         questionExample.createCriteria().andIdEqualTo(id);
         Question dbquestion = new Question();
         dbquestion.setStatus("1");
-        questionMapper.updateByExampleSelective(dbquestion,questionExample );
+        questionMapper.updateByExampleSelective(dbquestion, questionExample);
     }
 
     public void createOrUpdate(Question question) {
-
         if (question.getId() == null) {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
@@ -148,7 +153,10 @@ public class QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateByExampleSelective(question, questionExample);
+            int updated = questionMapper.updateByExampleSelective(question, questionExample);
+            if (updated != 1) {
+                throw new CustomizeException(CustomizeErrrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }

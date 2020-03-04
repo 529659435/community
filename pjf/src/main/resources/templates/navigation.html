@@ -46,6 +46,9 @@
                     <li th:if="${session.user == null}">
                         <a href="https://github.com/login/oauth/authorize?client_id=3aa17e57a080a05be3fa&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
                     </li>
+                    <li th:if="${session.user == null}">
+                        <a href="/registered">注册</a>
+                    </li>
                 </ul>
             </div>
         </div>
