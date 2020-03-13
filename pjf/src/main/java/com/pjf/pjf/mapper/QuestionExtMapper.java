@@ -12,5 +12,5 @@ public interface QuestionExtMapper {
      * @mbg.generated Sun Feb 09 21:42:52 CST 2020
      */
     int incView(Question question);
-
+    int incCommentCount(Question question);
 }

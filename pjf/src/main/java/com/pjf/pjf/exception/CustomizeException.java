@@ -20,15 +20,17 @@ package com.pjf.pjf.exception;
  */
 public class CustomizeException extends RuntimeException {
 
-    String message;
+    private Integer code;
+    private String message;
 
     public CustomizeException(ICustomizeErrorCode errorCode) {
         this.message = errorCode.getMessage();
+        this.code = errorCode.getCode();
     }
 
 
-    public CustomizeException(String message) {
-        this.message = message;
+    public Integer getCode() {
+        return code;
     }
 
     @Override

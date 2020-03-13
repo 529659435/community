@@ -21,6 +21,6 @@ package com.pjf.pjf.exception;
 public interface ICustomizeErrorCode {
 
     String getMessage();
-
+    Integer getCode();
 
 }

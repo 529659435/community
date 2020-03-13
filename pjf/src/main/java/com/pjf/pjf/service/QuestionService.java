@@ -86,7 +86,7 @@ public class QuestionService {
         return pagintionDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
 
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId).andStatusEqualTo("0");
@@ -125,7 +125,7 @@ public class QuestionService {
     }
 
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
             throw new CustomizeException(CustomizeErrrorCode.QUESTION_NOT_FOUND);
@@ -137,7 +137,7 @@ public class QuestionService {
         return questionDTO;
     }
 
-    public void getDelById(Integer id) {
+    public void getDelById(Long id) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andIdEqualTo(id);
         Question dbquestion = new Question();
@@ -163,7 +163,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question = new Question();
         question.setViewCount(1);
         question.setId(id);
