@@ -20,6 +20,7 @@ import com.pjf.pjf.model.Comment;
 import com.pjf.pjf.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -42,6 +43,8 @@ public class CommentService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    //事务注解
+    @Transactional
     public void insert(Comment comment) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrrorCode.TARGET_PARAM_NOT_FOUND);
