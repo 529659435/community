@@ -6,29 +6,44 @@ body {
     float: right;
     margin: 15px;
 }
+
 .main {
     background-color: white;
     margin: 30px;
 }
 
-.media-object{
+.media-object {
     width: 40px;
     height: 40px;
 }
-.text-desc{
+
+.media-body {
+    padding-top: 10px;
+}
+
+.text-desc {
     font-size: 12px;
     font-weight: normal;
     color: #999;
 }
 
-.profile .section{
+.profile .section {
     margin-top: 15px;
 }
 
-.community-menu{
-    color:#999;
+.community-menu {
+    color: #999;
 }
 
-.jumbotron{
+.jumbotron {
     margin: 50px;
+}
+
+.comment{
+    margin: 10px 0;
+}
+
+.btn-comment{
+    float: right;
+    margin-bottom: 10px;
 }
