@@ -10,6 +10,18 @@
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 
 </head>
+<script type="application/javascript">
+    //提示未登录，点击登录后关闭新页面
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        if(closable == "true"){
+            window.close();
+            window.localStorage.removeItem("closable")
+        }
+    }
+</script>
+
+
 <body>
 
 <div th:insert="navigation :: home"></div>
