@@ -10,13 +10,17 @@
  */
 package com.pjf.pjf.controller;
 
+import com.pjf.pjf.dto.CommentDTO;
 import com.pjf.pjf.dto.QuestionDTO;
+import com.pjf.pjf.service.CommentService;
 import com.pjf.pjf.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -33,11 +37,16 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private CommentService commentService;
+
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
+       List<CommentDTO> comments = commentService.listByQuestionId(id);
         //累加阅读数功能
         questionService.incView(id);
+        model.addAttribute("comments",comments);
         model.addAttribute("question", questionDTO);
         return "question";
     }
@@ -48,4 +57,15 @@ public class QuestionController {
 
         return "redirect:/";
     }
+
+
+
+
+
+
+
+
+
+
+
 }

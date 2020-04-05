@@ -10,7 +10,7 @@
  */
 package com.pjf.pjf.controller;
 
-import com.pjf.pjf.dto.CommentDTO;
+import com.pjf.pjf.dto.CommentCreateDTO;
 import com.pjf.pjf.dto.ResultDTO;
 import com.pjf.pjf.exception.CustomizeErrrorCode;
 import com.pjf.pjf.model.Comment;
@@ -43,16 +43,16 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrrorCode.NO_LOGIN);
         }
         Comment record = new Comment();
-        record.setParentId(commentDTO.getParentId());
-        record.setContent(commentDTO.getContent());
-        record.setType(commentDTO.getType());
+        record.setParentId(commentCreateDTO.getParentId());
+        record.setContent(commentCreateDTO.getContent());
+        record.setType(commentCreateDTO.getType());
         record.setGmtCreate(System.currentTimeMillis());
         record.setGmtModified(System.currentTimeMillis());
         record.setCommentator(user.getId());

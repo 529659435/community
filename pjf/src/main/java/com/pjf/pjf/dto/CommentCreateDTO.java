@@ -1,8 +1,8 @@
 /**
  * Copyright (C), 2015-2020, XXX有限公司
- * FileName: CommentDTO
+ * FileName: CommentCreateDTO
  * Author:   cj
- * Date:     2020-4-2 23:07
+ * Date:     2020-3-10 11:28
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -10,27 +10,20 @@
  */
 package com.pjf.pjf.dto;
 
-import com.pjf.pjf.model.User;
 import lombok.Data;
 
 /**
- * 〈一句话功能简述〉<br>
+ * 〈一句话功能简述〉<br> 
  * 〈〉
  *
  * @author cj
- * @create 2020-4-2
+ * @create 2020-3-10
  * @since 1.0.0
  */
 @Data
-public class CommentDTO {
+public class CommentCreateDTO {
 
-    private Long id;
     private Long parentId;
     private Integer type;
-    private Long commentator;
-    private Long gmtCreate;
-    private Long gmtModified;
-    private Long likeCount;
-    private String content;
-    private User user;
+    private String  content;
 }
