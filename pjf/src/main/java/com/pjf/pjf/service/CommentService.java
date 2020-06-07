@@ -65,7 +65,6 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrrorCode.TYPE_PARAM_WRONG);
         }
 
-
         if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
             //回复评论
             Comment dbComent = commentMapper.selectByPrimaryKey(comment.getParentId());
@@ -86,14 +85,13 @@ public class CommentService {
     }
 
 
-    public List<CommentDTO> listByQuestionId(Long id) {
+    public List<CommentDTO> listByTargetId(Long parentId, CommentTypeEnum type) {
 
         CommentExample example = new CommentExample();
         example.createCriteria()
-                .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.COMMENT.getType());
-
-
+                .andParentIdEqualTo(parentId)
+                .andTypeEqualTo(type.getType());
+        example.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(example);
 
         // jdk1.8语法

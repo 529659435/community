@@ -11,19 +11,19 @@
 package com.pjf.pjf.controller;
 
 import com.pjf.pjf.dto.CommentCreateDTO;
+import com.pjf.pjf.dto.CommentDTO;
 import com.pjf.pjf.dto.ResultDTO;
+import com.pjf.pjf.enums.CommentTypeEnum;
 import com.pjf.pjf.exception.CustomizeErrrorCode;
 import com.pjf.pjf.model.Comment;
 import com.pjf.pjf.model.User;
 import com.pjf.pjf.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -52,7 +52,7 @@ public class CommentController {
         Comment record = new Comment();
         record.setParentId(commentCreateDTO.getParentId());
         record.setContent(commentCreateDTO.getContent());
-        record.setType(commentCreateDTO.getType());
+        record.setType(commentCreateDTO.getTypes());
         record.setGmtCreate(System.currentTimeMillis());
         record.setGmtModified(System.currentTimeMillis());
         record.setCommentator(user.getId());
@@ -62,4 +62,14 @@ public class CommentController {
 
         return ResultDTO.okOf();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id")Long id) {
+       List<CommentDTO> commentDTOS =  commentService.listByTargetId(id,CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOS);
+
+
+    }
+
 }

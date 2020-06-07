@@ -1,3 +1,8 @@
+
+
+/**
+ *提交回复
+ */
 function post() {
 
     var questionId = $("#question_id").val();
@@ -8,8 +13,8 @@ function post() {
         contentType: 'application/json',
         data: JSON.stringify({
             "parentId": questionId,
-            "content": content,
-            "type": 2
+            "types": 1,
+            "content": content
         }),
 
         success: function (response) {
@@ -32,4 +37,33 @@ function post() {
         dataType: "json"
 
     });
+}
+
+/**
+ * 展开二级评论
+ */
+function collapseComments(e){
+
+    var id = e.getAttribute("data-id");
+    var comments = $("#comment-"+id);
+
+    console.log(id);
+    //获取一下二级评论展开状态
+    var collapse = e.getAttribute("data-collapse");
+    if(collapse){
+        //折叠二级评论
+        comments.removeClass("in");
+        e.removeAttribute("data-collapse","in");
+        e.classList.remove("active");
+    }else{
+        //展开二级评论
+        comments.addClass("in");
+        //标记二级评论展开状态
+        e.setAttribute("data-collapse","in");
+        e.classList.add("active");
+    }
+
+
+
+
 }

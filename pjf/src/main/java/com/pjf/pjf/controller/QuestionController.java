@@ -12,6 +12,7 @@ package com.pjf.pjf.controller;
 
 import com.pjf.pjf.dto.CommentDTO;
 import com.pjf.pjf.dto.QuestionDTO;
+import com.pjf.pjf.enums.CommentTypeEnum;
 import com.pjf.pjf.service.CommentService;
 import com.pjf.pjf.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,8 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
-       List<CommentDTO> comments = commentService.listByQuestionId(id);
+        Long parentId = id;
+       List<CommentDTO> comments = commentService.listByTargetId(parentId, CommentTypeEnum.QUESTION);
         //累加阅读数功能
         questionService.incView(id);
         model.addAttribute("comments",comments);
