@@ -14,10 +14,7 @@ import com.pjf.pjf.dto.CommentDTO;
 import com.pjf.pjf.enums.CommentTypeEnum;
 import com.pjf.pjf.exception.CustomizeErrrorCode;
 import com.pjf.pjf.exception.CustomizeException;
-import com.pjf.pjf.mapper.CommentMapper;
-import com.pjf.pjf.mapper.QuestionExtMapper;
-import com.pjf.pjf.mapper.QuestionMapper;
-import com.pjf.pjf.mapper.UserMapper;
+import com.pjf.pjf.mapper.*;
 import com.pjf.pjf.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +51,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
     //事务注解
     @Transactional
     public void insert(Comment comment) {
@@ -72,6 +72,12 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            //增加评论数
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1);
+            commentExtMapper.incCommentCount(parentComment);
+
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());

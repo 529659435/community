@@ -28,6 +28,7 @@ import java.util.List;
 public class ResultDTO<T> {
     private Integer code;
     private String message;
+    //泛型T：可代表一切
     private T data;
 
 
@@ -55,7 +56,7 @@ public class ResultDTO<T> {
     }
 
     //泛型
-    public static <T>ResultDTO okOf(T t) {
+    public static <T> ResultDTO okOf(T t) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setCode(200);
         resultDTO.setMessage("请求成功");

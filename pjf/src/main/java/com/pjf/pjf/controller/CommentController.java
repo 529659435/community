@@ -41,6 +41,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    //评论
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
@@ -58,6 +59,7 @@ public class CommentController {
         record.setCommentator(user.getId());
         //Long类型的0
         record.setLikeCount(0L);
+        record.setCommentCount(0);
         commentService.insert(record);
 
         return ResultDTO.okOf();
@@ -68,8 +70,6 @@ public class CommentController {
     public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id")Long id) {
        List<CommentDTO> commentDTOS =  commentService.listByTargetId(id,CommentTypeEnum.COMMENT);
         return ResultDTO.okOf(commentDTOS);
-
-
     }
 
 }
